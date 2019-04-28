@@ -13,6 +13,7 @@ class adjacencyMatrix
 	
 	public:
 	adjacencyMatrix(unsigned n);
+	adjacencyMatrix(adjacencyMatrix&&) = default;
 	~adjacencyMatrix();
 	
 	void addConnection(unsigned a, unsigned b);
@@ -86,6 +87,7 @@ class neighbourList
 	
 	public:
 	neighbourList(unsigned n);
+	neighbourList(neighbourList&&) = default;
 	~neighbourList();
 	
 	void addConnection(unsigned a, unsigned b);

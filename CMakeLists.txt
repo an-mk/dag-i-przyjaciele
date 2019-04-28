@@ -13,3 +13,5 @@ else()
 endif()
 
 add_executable(test main.cpp)
+find_package(OpenMP REQUIRED)
+target_link_libraries(test OpenMP::OpenMP_CXX)

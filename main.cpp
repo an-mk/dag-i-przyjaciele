@@ -1,15 +1,19 @@
 #include "topological.hpp"
 #include "randomDAG.hpp"
+#include "MST.hpp"
 #include "MeasurementTool.hpp"
 #include <iostream>
+#include <omp.h>
 
 using TestDataType = std::pair<adjacencyMatrix, neighbourList>;
 
 int main() 
 {
-    MesurementLab<TestDataType, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600> lab;
+    omp_set_num_threads(8);
+	mst(generateRandomDAG(15,1).second);
+    MesurementLab<TestDataType, 40, 80, 120, 160, 200, 240, 280, 320, 360, 400, 440, 480, 520, 560, 600> lab;
     lab.setTestGenerator([](const size_t &sizeOfTest){ return generateRandomDAG(sizeOfTest, 0.6f); });
     lab([](const std::pair<adjacencyMatrix, neighbourList>& G){ ts(G.first); }, "adjacencyMatrix");
-    lab([](const std::pair<adjacencyMatrix, neighbourList>& G){ ts(G.first); }, "neighbourList");
+    lab([](const std::pair<adjacencyMatrix, neighbourList>& G){ ts(G.second); }, "neighbourList");
     return 0;
 }

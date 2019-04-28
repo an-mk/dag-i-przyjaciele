@@ -13,6 +13,11 @@ std::pair<adjacencyMatrix, neighbourList> generateRandomDAG(int size, float fact
     std::uniform_int_distribution<int> rng(0, size - 2);
     std::set<std::pair<int, int>> arcs;
     int a = size - 1, b;
+
+    arcs.insert({0, 1});
+    arcs.insert({0, 3 });
+    arcs.insert({1, 2});
+
     while (arcs.size() < size*(size - 1)/2*factor)
     {
         a = rng(mt);

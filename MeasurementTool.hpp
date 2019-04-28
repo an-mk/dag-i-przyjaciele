@@ -9,7 +9,6 @@
 #include <iostream>
 #include <string>
 #include <functional>
-#include <any>
 
 using timeType = std::chrono::nanoseconds;
 
@@ -47,15 +46,17 @@ class MeasurementTool
 public:
     MeasurementTool(FunctionToTest f, TestGenerator t, SizesOfTests... numbers)
     {
-        std::size_t i = 0, j;
-        std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
-        for (const auto& result : {numbers...})
+        std::size_t i = 0;
+        std::size_t sizes[sizeof...(numbers)] = {numbers...};
+        for (i = 0; i < sizeof...(numbers); i++)
         {
-            j = iterationsOfTests;
+            std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
+            std::size_t j = 0;
             results[i] = timeType(0);
-            while (j--)
+            #pragma omp parallel for
+            for (j = 0; j < iterationsOfTests; j++)
             {
-                auto testData = t(result);
+                auto testData = t(sizes[i]);
                 start = std::chrono::high_resolution_clock::now();
                 f(testData);
                 end = std::chrono::high_resolution_clock::now();
@@ -64,20 +65,21 @@ public:
                 results[i] += std::chrono::duration_cast<timeType>(end - start);
             }
             results[i] /= iterationsOfTests;
-            i++;
         }
     }
     MeasurementTool(intHolder<1>, FunctionToTest f, TestGenerator t, SizesOfTests... numbers)
     {
-        std::size_t i = 0, j;
-        std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
-        for (const auto& result : {numbers...})
+        std::size_t i = 0;
+        std::size_t sizes[sizeof...(numbers)] = {numbers...};
+        for (i = 0; i < sizeof...(numbers); i++)
         {
-            j = iterationsOfTests;
+            std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
+            std::size_t j = 0;
             results[i] = timeType(0);
-            while (j--)
+            #pragma omp parallel for
+            for (j = 0; j < iterationsOfTests; j++)
             {
-                auto testData = t(result);
+                auto testData = t(sizes[i]);
                 start = std::chrono::high_resolution_clock::now();
                 f(testData);
                 end = std::chrono::high_resolution_clock::now();
@@ -86,21 +88,21 @@ public:
                 results[i] += std::chrono::duration_cast<timeType>(end - start);
             }
             results[i] /= iterationsOfTests;
-            i++;
         }
     }
     MeasurementTool(intHolder<2>, FunctionToTest f, TestGenerator t, SizesOfTests... numbers)
     {
-        std::size_t i = 0, j;
-        std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
-        for (const auto& result : {numbers...})
+        std::size_t i = 0;
+        std::size_t sizes[sizeof...(numbers)] = {numbers...};
+        for (i = 0; i < sizeof...(numbers); i++)
         {
-            j = iterationsOfTests;
+            std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
+            std::size_t j = 0;
             results[i] = timeType(0);
-            //std::cout<<"#";
-            while (j--)
+            #pragma omp parallel for
+            for (j = 0; j < iterationsOfTests; j++)
             {
-                auto testData = t(result);
+                auto testData = t(sizes[i]);
                 start = std::chrono::high_resolution_clock::now();
                 f(std::begin(testData), std::end(testData));
                 end = std::chrono::high_resolution_clock::now();
@@ -109,14 +111,13 @@ public:
                 results[i] += std::chrono::duration_cast<timeType>(end - start);
             }
             results[i] /= iterationsOfTests;
-            i++;
         }
         //std::cout<<std::string(sizeof...(numbers), '\b');
     }
     std::array<timeType, sizeof...(SizesOfTests)>& getResults() { return results; }
 private:
     std::array<timeType, sizeof...(SizesOfTests)> results;
-    static constexpr std::size_t iterationsOfTests = 500;
+    static constexpr std::size_t iterationsOfTests = 100;
 };
 
 template <class FunctionToTest, class TestGenerator, class... SizesOfTests>
