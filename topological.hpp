@@ -1,16 +1,19 @@
+#ifndef TOPOLOGICAL_HPP_
+#define TOPOLOGICAL_HPP_
+
 #include <iostream>
 #include <stack>
 #include <vector>
 #include <algorithm>
 
-class adjancencyMatrix
+class adjacencyMatrix
 {
 	bool **matrix;
 	unsigned n;
 	
 	public:
-	adjancencyMatrix(unsigned n);
-	~adjancencyMatrix();
+	adjacencyMatrix(unsigned n);
+	~adjacencyMatrix();
 	
 	void addConnection(unsigned a, unsigned b);
 	void remConnection(unsigned a, unsigned b);
@@ -18,7 +21,7 @@ class adjancencyMatrix
 	unsigned getSize()const{return n;}
 
 };
-adjancencyMatrix::adjancencyMatrix(unsigned n)
+adjacencyMatrix::adjacencyMatrix(unsigned n)
 {
 	this->n = n;
 	
@@ -29,25 +32,25 @@ adjancencyMatrix::adjancencyMatrix(unsigned n)
 		for(decltype(n) f=0; f<n; f++)matrix[i][f] = false;
 	}
 }
-adjancencyMatrix::~adjancencyMatrix()
+adjacencyMatrix::~adjacencyMatrix()
 {
 	for(decltype(n) i=0; i<n; i++)delete [] matrix[i];
 	delete [] matrix;
 }
-void adjancencyMatrix::addConnection(unsigned a, unsigned b)
+void adjacencyMatrix::addConnection(unsigned a, unsigned b)
 {
 	matrix[a][b] = true;
 }
-void adjancencyMatrix::remConnection(unsigned a, unsigned b)
+void adjacencyMatrix::remConnection(unsigned a, unsigned b)
 {
 	matrix[a][b] = false;
 }
-bool adjancencyMatrix::isConnected (unsigned a, unsigned b)const
+bool adjacencyMatrix::isConnected (unsigned a, unsigned b)const
 {
 	return matrix[a][b];
 }
 /////////////////////////////////////
-static void tsA(unsigned a, const adjancencyMatrix& ax, unsigned *visited, std::stack<unsigned> &vec)
+static void tsA(unsigned a, const adjacencyMatrix& ax, unsigned *visited, std::stack<unsigned> &vec)
 {
 	visited[a] = 1;
 	
@@ -58,7 +61,7 @@ static void tsA(unsigned a, const adjancencyMatrix& ax, unsigned *visited, std::
 	}
 	vec.push(a);
 }
-std::stack<unsigned> ts(const adjancencyMatrix& ax)
+std::stack<unsigned> ts(const adjacencyMatrix& ax)
 {
 	std::stack<unsigned> vec;
 	
@@ -146,3 +149,5 @@ std::stack<unsigned> ts(const neighbourList& ax)
 	
 	return vec;
 }
+
+#endif /* !TOPOLOGICAL_HPP_ */
