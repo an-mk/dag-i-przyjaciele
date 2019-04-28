@@ -15,8 +15,9 @@ std::pair<adjacencyMatrix, neighbourList> generateRandomDAG(int size, float fact
     int a = size - 1, b;
 
     arcs.insert({0, 1});
-    arcs.insert({0, 3 });
     arcs.insert({1, 2});
+    arcs.insert({2, 3});
+    arcs.insert({3, 4});
 
     while (arcs.size() < size*(size - 1)/2*factor)
     {

@@ -1,5 +1,6 @@
 #include <map>
 #include <functional>
+#include <cstdio>
 #include "topological.hpp"
 
 
@@ -25,7 +26,7 @@ neighbourList mst(const neighbourList& g)
     std::set<prev, cmp> priorityQueue;
     for (const auto& i : g.getConnections(0))
     {
-        priorityQueue.insert({0, (int)i, 1/*rand*/});
+        priorityQueue.insert({0, (int)i, rand()%1000});
         //std::cout<<0<<" "<<i<<"\n";
     }
     while (toTake && !priorityQueue.empty())
@@ -42,7 +43,7 @@ neighbourList mst(const neighbourList& g)
         //if (priorityQueue.empty()) break;
         for (const auto& i : g.getConnections(top.to))
         {
-            priorityQueue.insert({top.to, (int)i, 1/*rand*/}); 
+            priorityQueue.insert({top.to, (int)i, rand()%1000}); 
             //std::cout<<top.to<<" "<<i<<"\n";
         }
        // std::cout<<top.from<<" "<<top.to<<"\n";
@@ -64,7 +65,7 @@ adjacencyMatrix mst(const adjacencyMatrix& g)
     {
         if (!g.isConnected(0, i))
             continue;
-        priorityQueue.insert({0, (int)i, 1/*rand*/});
+        priorityQueue.insert({0, (int)i, rand()%1000});
         //std::cout<<0<<" "<<i<<"\n";
     }
     while (toTake && !priorityQueue.empty())
@@ -83,7 +84,7 @@ adjacencyMatrix mst(const adjacencyMatrix& g)
         {
             if (!g.isConnected(top.to, i))
                 continue;
-            priorityQueue.insert({top.to, (int)i, 1/*rand*/}); 
+            priorityQueue.insert({top.to, (int)i, rand()%1000}); 
             //std::cout<<top.to<<" "<<i<<"\n";
         }
        // std::cout<<top.from<<" "<<top.to<<"\n";
