@@ -91,7 +91,7 @@ class neighbourList
 	void addConnection(unsigned a, unsigned b);
 	void remConnection(unsigned a, unsigned b);
 	bool isConnected(unsigned a, unsigned b)const;
-	std::vector<unsigned> getConnections(unsigned a)const;
+	const std::vector<unsigned>& getConnections(unsigned a)const;
 	unsigned getSize()const{return n;}
 
 };
@@ -118,7 +118,7 @@ bool neighbourList::isConnected (unsigned a, unsigned b)const
 	auto ret = std::find(lists[a].begin(), lists[a].end(), b);
 	return ret == lists[a].end() ? false : true;
 }
-std::vector<unsigned> neighbourList::getConnections(unsigned a)const
+const std::vector<unsigned>& neighbourList::getConnections(unsigned a)const
 {
 	return lists[a];
 }
@@ -126,9 +126,10 @@ static void tsA(unsigned a, const neighbourList& ax, unsigned *visited, std::sta
 {
 	visited[a] = 1;
 	
-	auto conns = ax.getConnections(a);
+	//auto conns = ax.getConnections(a);
+	// Range based for działa dobrze z funkcją zwracającą referencję ;D
 	
-	for(auto i : conns){
+	for(const auto& i : ax.getConnections(a)){
 			if(!visited[i])tsA(i,ax,visited, vec);
 	}
 	vec.push(a);

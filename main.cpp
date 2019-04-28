@@ -1,57 +1,15 @@
 #include "topological.hpp"
 #include "randomDAG.hpp"
+#include "MeasurementTool.hpp"
 #include <iostream>
 
-int main()
-{
-	auto x = generateRandomDAG(10, 0.5);
-	adjacencyMatrix ax = x.first;
-	//ax.addConnection(3,1);
-	//ax.addConnection(3,0);
-	//ax.addConnection(3,4);
-	//
-	//ax.addConnection(1,2);
-	//ax.addConnection(1,0);
-	//
-	//ax.addConnection(0,2);
-	//
-	//ax.addConnection(4,2);
-	//ax.addConnection(4,1);
-	//
-	//ax.addConnection(5,0);
-	//ax.addConnection(5,4);
-	//ax.addConnection(3,1);
-	
-	auto ret = ts(ax);
-	
-	while(!ret.empty()){
-		std::cout<<ret.top()<<" ";
-		ret.pop();
-	}
+using TestDataType = std::pair<adjacencyMatrix, neighbourList>;
 
-/////
-	neighbourList nl = x.second;
-	//nl.addConnection(3,1);
-	//nl.addConnection(3,0);
-	//nl.addConnection(3,4);
-	//
-	//nl.addConnection(1,2);
-	//nl.addConnection(1,0);
-	//
-	//nl.addConnection(0,2);
-	//
-	//nl.addConnection(4,2);
-	//nl.addConnection(4,1);
-	//
-	//nl.addConnection(5,0);
-	//nl.addConnection(5,4);
-	//nl.addConnection(3,1);
-	
-	ret = ts(nl);
-	std::cout<<"\n";
-	while(!ret.empty()){
-		std::cout<<ret.top()<<" ";
-		ret.pop();
-	}
-	
+int main() 
+{
+    MesurementLab<TestDataType, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600> lab;
+    lab.setTestGenerator([](const size_t &sizeOfTest){ return generateRandomDAG(sizeOfTest, 0.6f); });
+    lab([](const std::pair<adjacencyMatrix, neighbourList>& G){ ts(G.first); }, "adjacencyMatrix");
+    lab([](const std::pair<adjacencyMatrix, neighbourList>& G){ ts(G.first); }, "neighbourList");
+    return 0;
 }
